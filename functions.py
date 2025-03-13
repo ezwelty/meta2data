@@ -42,6 +42,7 @@ def build_readme() -> None:
   )
   # Render template and write to file
   text = template.render(**metadata)
+  BUILD_DIR.mkdir(exist_ok=True)
   BUILD_DIR.joinpath('readme.html').write_text(text)
 
 
@@ -52,8 +53,9 @@ def build_excel_template() -> None:
   # Render header comments
   header_comments = render_header_comments(metadata)
   # Render and write template to file
+  BUILD_DIR.mkdir(exist_ok=True)
   tablecloth.excel.write_template(
-    metadata, path='build/template.xlsx', header_comments=header_comments
+    metadata, path=BUILD_DIR.joinpath('template.xlsx'), header_comments=header_comments
   )
 
 
