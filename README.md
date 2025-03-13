@@ -1,11 +1,12 @@
 # Metadata-driven data development
 
-This repository demonstrates a metadata-driven approach to data development. The goal is to:
+This repository demonstrates a metadata-driven approach to dataset development. The goal is to:
 
 * Describe the data with machine-actionable metadata
 * Test that the data is as described
-* Generate spreadsheet templates
-* Generate documentation
+* Build derivative products like documentation and spreadsheet templates
+
+This is general approach I use to curate glacier datasets like [fog](https://gitlab.com/wgms/fog), [glathida](https://gitlab.com/wgms/glathida), and (especially) [glenglat](https://github.com/mjacqu/glenglat).
 
 The following files are the foundation of our dataset:
 
