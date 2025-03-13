@@ -49,6 +49,8 @@ Generate spreadsheet templates from the metadata (`datapackage.yaml`).
 
 ### Microsoft Excel
 
+Write the template to `build/template.xlsx`.
+
 ```bash
 python functions.py build_excel_template
 ```
@@ -74,7 +76,7 @@ python functions.py build_gsheets_template --name 'template'
 
 ## Documentation
 
-Render the template (`templates/readme.html.jinja`) with content from the metadata (`datapackage.yaml`), and write the result to `build/readme.html`.
+Render the template (`templates/readme.html.jinja`) with content from the metadata (`datapackage.yaml`) and write the result to `build/readme.html`.
 
 ```bash
 python functions.py build_readme
