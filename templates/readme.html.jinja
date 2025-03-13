@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.statically.io/gl/wgms/fog/main/src/fog/templates/style.css" />
+  <style>
+    img.orcid {
+      height: 1rem;
+      vertical-align: text-bottom;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>{{ name }}</h1>
+  <p>{{ description }}</p>
+  <p>
+    <code>version</code> {{ version }}<br>
+    <code>created</code> {{ created[:10] }}<br>
+    <code>doi</code> <a href="{{ id }}">{{ id }}</a><br>
+    <code>authors</code> {% for person in contributors %}{{ person.title }} <a href="{{ person.path }}"><img class="orcid" src="https://zenodo.org/static/images/orcid.svg"></a>{% if loop.nextitem %} · {% endif %}{% endfor %}
+  </p>
+
+  {% for resource in resources %}
+  <h2><code>{{ resource.path }}</code></h2>
+  <table>
+    <tr>
+      <th>name</th>
+      <th>description</th>
+      <th>type</th>
+      <th>constraints</th>
+    </tr>
+    {% for field in resource.schema.fields %}
+    <tr>
+      <td><code>{{ field.name }}</code></td>
+      <td>{{ field.description }}</td>
+      <td>{{ field.type }}{% if field.unit %} ({{ field.unit }}){% endif %}</td>
+      <td>
+        {% if field.constraints %}
+        {% for key, value in field.constraints.items() %}
+        {{ key }}: {{ value }}{% if loop.nextitem %}<br>{% endif +%}
+        {% endfor %}
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endfor %}
+
+</body>
+
+</html>

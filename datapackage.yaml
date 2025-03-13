@@ -1,0 +1,89 @@
+name: borehole-temperature
+description: Measurements of englacial borehole temperatures.
+version: '1.0'
+created: '2025-03-13T00:00:00Z'
+id: https://doi.org/10.5281/zenodo.11516611
+contributors:
+  - title: Ethan Welty
+    path: https://orcid.org/0000-0002-8596-1705
+  - title: Mylène Jacquemart
+    path: https://orcid.org/0000-0003-2501-7645
+resources:
+  - name: borehole
+    path: data/borehole.csv
+    schema:
+      primaryKey: [id]
+      fields:
+        - name: id
+          description: Identifier.
+          type: integer
+          constraints:
+            required: true
+            unique: true
+            minimum: 1
+        - name: latitude
+          type: number
+          description: Latitude (EPSG:4326).
+          units: degree
+          constraints:
+            required: true
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          type: number
+          description: Longitude (EPSG:4326).
+          units: degree
+          constraints:
+            required: true
+            minimum: -180
+            maximum: 180
+        - name: date
+          description: Drilling date.
+          type: date
+          format: '%Y-%m-%d'
+          example: '2025-03-14'
+          constraints:
+            required: true
+        - name: method
+          description: Drilling method.
+          type: string
+          constraints:
+            enum: [mechanical, thermal]
+        - name: to_bed
+          description: Whether the bed was reached.
+          type: boolean
+  - name: measurement
+    path: data/measurement.csv
+    schema:
+      primaryKey: [borehole_id, date, depth]
+      foreignKeys:
+        - fields: [borehole_id]
+          reference:
+            resource: borehole
+            fields: [id]
+      fields:
+        - name: borehole_id
+          description: Borehole identifier.
+          type: integer
+          constraints:
+            required: true
+        - name: date
+          description: Measurement date.
+          type: date
+          format: '%Y-%m-%d'
+          example: '2025-03-14'
+          constraints:
+            required: true
+        - name: depth
+          description: Depth.
+          type: number
+          units: m
+          constraints:
+            required: true
+            minimum: 0
+        - name: temperature
+          description: Temperature.
+          type: number
+          units: °C
+          constraints:
+            required: true

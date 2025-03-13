@@ -1,0 +1,19 @@
+[{{ type }}{% if units %}: {{ units }}{% endif %}]
+{%- if constraints and constraints.get('required', False) %}
+ *required*
+{% else %}
+ optional
+{% endif %}
+
+{{ description }}
+
+{% if constraints -%}
+  {% for key, value in constraints.items() -%}
+    {% if key not in ['required', 'enum'] -%}
+      {{ key }}: {{ value }}
+    {% endif %}
+  {% endfor %}
+{%- endif -%}
+{% if example -%}
+  example: {{ example }}
+{% endif %}
