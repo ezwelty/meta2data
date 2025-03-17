@@ -27,15 +27,15 @@
   <table>
     <tr>
       <th>name</th>
-      <th>description</th>
       <th>type</th>
+      <th>description</th>
       <th>constraints</th>
     </tr>
     {% for field in resource.schema.fields %}
     <tr>
       <td><code>{{ field.name }}</code></td>
-      <td>{{ field.description }}</td>
-      <td>{{ field.type }}{% if field.unit %} ({{ field.unit }}){% endif %}</td>
+      <td>{{ field.type }}{% if field.units or field.format %}<br>({{ field.units or field.format }}){% endif %}</td>
+      <td>{{ field.description }}{% if field.example %}<br>(e.g. '{{ field.example }}'){% endif %}</td>
       <td>
         {% if field.constraints %}
         {% for key, value in field.constraints.items() %}
