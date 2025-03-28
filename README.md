@@ -38,7 +38,7 @@ conda activate meta2data
 
 ## Testing
 
-Validate the data package described in `datapackage.yaml` (using [`frictionless-py`](https://framework.frictionlessdata.io)).
+Validate the data as described in `datapackage.yaml` (using [`frictionless-py`](https://framework.frictionlessdata.io)).
 
 ```bash
 frictionless validate datapackage.yaml
@@ -48,6 +48,22 @@ Run additional tests (using [`pytest`](https://docs.pytest.org)).
 
 ```bash
 pytest
+```
+
+### Further testing
+
+Validate the data as described in `datapackage.yaml` and `checks.yaml` (using [`validator`](https://github.com/ezwelty/validator)).
+
+```bash
+python functions.py validate_with_validator
+```
+
+## Documentation
+
+Render the template (`templates/readme.html.jinja`) with content from the metadata (`datapackage.yaml`) and write the result to `build/readme.html`.
+
+```bash
+python functions.py build_readme
 ```
 
 ## Spreadsheet templates
@@ -79,12 +95,4 @@ Finally:
 
 ```bash
 python functions.py build_gsheets_template --name 'template'
-```
-
-## Documentation
-
-Render the template (`templates/readme.html.jinja`) with content from the metadata (`datapackage.yaml`) and write the result to `build/readme.html`.
-
-```bash
-python functions.py build_readme
 ```

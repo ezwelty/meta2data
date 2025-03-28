@@ -1,12 +1,17 @@
 import os
 from pathlib import Path
+from typing import Hashable
 import yaml
 
 import dotenv
 import jinja2
+import pandas as pd
 import pygsheets
 import tablecloth.excel
 import tablecloth.gsheets
+import tabulate
+import validator
+
 
 dotenv.load_dotenv()
 
@@ -99,6 +104,50 @@ def build_gsheets_template(name: str) -> str:
   return f'https://docs.google.com/spreadsheets/d/{book.id}'
 
 
+# ---- Validator ----
+
+@validator.register_check(
+  message='Not monotonic increasing',
+)
+def is_monotonic_increasing(s: pd.Series) -> bool:
+  """Check if a series is monotonically increasing."""
+  return s.is_monotonic_increasing
+
+
+@validator.register_check(
+  message='Not on or after borehole date',
+)
+def is_on_or_after_borehole_date(
+  s: pd.Series, df: pd.DataFrame, dfs: dict[Hashable, pd.DataFrame]
+) -> None:
+  """Test that measurement date is on or after borehole date."""
+  borehole_date = dfs['borehole'].set_index('id')['date'].loc[df['borehole_id']].values
+  return s.ge(borehole_date)
+
+def validate_with_validator() -> None:
+  """Validate dataset with validator."""
+  # Read Data Package metadata from file
+  metadata = yaml.safe_load(METADATA_PATH.read_text())
+  # Read validator metadata from file
+  checks = yaml.safe_load(Path('checks.yaml').read_text())
+  # Build validator schema
+  schema = (
+    validator.convert.frictionless.package_to_schema(metadata) +
+    validator.Schema.deserialize(*checks)
+  )
+  # Read data as string
+  dfs = {
+    path.stem: pd.read_csv(path, dtype='string') for path in Path('data').glob('*.csv')
+  }
+  # Run tests
+  # HACK: Ignore warnings for cleaner output
+  import warnings
+  warnings.filterwarnings('ignore')
+  report = schema(dfs)
+  print(report, end='\n\n')
+  print(tabulate.tabulate(report.to_dataframe().fillna(''), headers='keys'))
+
+
 if __name__ == '__main__':
   # Expose functions to command line
   import fire
@@ -106,4 +155,5 @@ if __name__ == '__main__':
     'build_readme': build_readme,
     'build_excel_template': build_excel_template,
     'build_gsheets_template': build_gsheets_template,
+    'validate_with_validator': validate_with_validator
   })

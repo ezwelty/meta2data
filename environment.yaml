@@ -12,3 +12,4 @@ dependencies:
   - pip
   - pip:
     - 'tablecloth[excel,gsheets] @ git+https://github.com/ezwelty/tablecloth@e9e3431'
+    - 'validator @ git+https://github.com/ezwelty/validator@507175e'

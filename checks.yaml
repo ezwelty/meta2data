@@ -1,0 +1,8 @@
+- table: borehole
+  column: id
+  checks:
+    - name: is_monotonic_increasing
+- table: measurement
+  column: date
+  checks:
+    - name: is_on_or_after_borehole_date

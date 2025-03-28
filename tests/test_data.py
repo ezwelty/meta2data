@@ -12,7 +12,7 @@ def test_borehole_id_is_sorted() -> None:
   assert dfs['borehole']['id'].is_monotonic_increasing
 
 
-def test_measurement_date_after_borehole_date() -> None:
+def test_measurement_date_on_or_after_borehole_date() -> None:
   """Test that measurement date is on or after borehole date."""
   df = dfs['measurement']
   borehole_date = dfs['borehole'].set_index('id')['date'].loc[df['borehole_id']].values
